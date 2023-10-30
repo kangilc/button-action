@@ -1,8 +1,56 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { fireEvent, render, screen } from "@testing-library/react";
+import App from "./App";
 
-test('renders learn react link', () => {
+test("the counter start at 0", () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+
+  const counterElement = screen.getByTestId("counter");
+  expect(counterElement).toHaveTextContent(0);
+});
+
+test("minus button has correct text", () => {
+  render(<App />);
+
+  const buttonElement = screen.getByTestId("minus-button");
+  expect(buttonElement).toHaveTextContent("-");
+});
+
+test("plus button has correct text", () => {
+  render(<App />);
+
+  const buttonElement = screen.getByTestId("plus-button");
+  expect(buttonElement).toHaveTextContent("+");
+});
+
+test("when the + button is pressed, the counter change", () => {
+  render(<App />);
+
+  const buttonElement = screen.getByTestId("plus-button");
+  fireEvent.click(buttonElement);
+  const counterElement = screen.getByTestId("counter");
+  expect(counterElement).toHaveTextContent(1);
+});
+
+test("when the - button is pressed, the counter change", () => {
+  render(<App />);
+  const buttonElement = screen.getByTestId("minus-button");
+  fireEvent.click(buttonElement);
+  const counterElement = screen.getByTestId("counter");
+  expect(counterElement).toHaveTextContent(-1);
+});
+
+test("should on/off button has blue color", async () => {
+  render(<App />);
+  const buttonElement = screen.getByTestId("on/off-button");
+  expect(buttonElement).toHaveStyle({ backgroundColor: "blue" });
+});
+
+test("should prevent the -, + button from being pressed when the on/off button is clicked", async () => {
+  render(<App />);
+  const onOffButtonElement = screen.getByTestId('on/off-button');
+  fireEvent.click(onOffButtonElement);
+  const plusButtonElement = screen.getByTestId('plus-button');
+  expect(plusButtonElement).toBeDisabled();
+  
+
 });
